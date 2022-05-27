@@ -1,0 +1,115 @@
+{
+  "app-id": "tv.plex.PlexHTPC",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.15-21.08",
+  "sdk": "org.kde.Sdk",
+  "base": "io.qt.qtwebengine.BaseApp",
+  "base-version": "5.15-21.08",
+  "command": "/bin/bash",
+  "finish-args": [
+    "--socket=x11",
+    "--socket=wayland",
+    "--socket=pulseaudio",
+    "--share=ipc",
+    "--share=network",
+    "--device=dri",
+    "--device=all",
+    "--filesystem=xdg-videos:ro",
+    "--filesystem=xdg-music:ro",
+    "--filesystem=xdg-pictures:ro",
+    "--talk-name=org.freedesktop.PowerManagement",
+    "--talk-name=org.freedesktop.ScreenSaver",
+    "--system-talk-name=org.freedesktop.login1"
+  ],
+  "build-options": {
+    "strip": true
+  },
+  "modules": [
+    "modules/io.mpv.Mpv.yml",
+    {
+      "name": "squashfs-tools",
+      "modules": [
+        {
+          "name": "lzo",
+          "sources": [
+            {
+              "type": "archive",
+              "url": "https://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz",
+              "sha256": "c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072"
+            }
+          ],
+          "buildsystem": "autotools"
+        }
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://github.com/plougher/squashfs-tools.git",
+          "branch": "master"
+        }
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "make -C squashfs-tools GZIP_SUPPORT=1 XZ_SUPPORT=1 LZO_SUPPORT=1 LZMA_XZ_SUPPORT=1 LZ4_SUPPORT=1 ZSTD_SUPPORT=1 XATTR_SUPPORT=1",
+        "install -D squashfs-tools/unsquashfs /app/bin/unsquashfs"
+      ]
+    },
+    {
+      "name": "libbsd",
+      "modules": [
+        {
+          "name": "libmd",
+          "sources": [
+            {
+              "type": "git",
+              "url": "https://gitlab.freedesktop.org/libbsd/libmd.git",
+              "branch": "main"
+            }
+          ],
+          "buildsystem": "autotools"
+        }
+      ],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.freedesktop.org/libbsd/libbsd.git",
+          "branch": "main"
+        }
+      ],
+      "buildsystem": "autotools"
+    },
+    {
+      "name": "plex-htpc",
+      "buildsystem": "simple",
+      "build-commands": [
+        "unsquashfs -q -f -d /app/plex-htpc plex-htpc.snap",
+        "sed -i 's;LD_LIBRARY_PATH=$BASE_DIR/lib/:$BASE_DIR:$LD_LIBRARY_PATH;LD_LIBRARY_PATH=$BASE_DIR/usr/lib/x86_64-linux-gnu:$BASE_DIR/usr/lib/x86_64-linux-gnu/pulseaudio:$BASE_DIR/lib/:$BASE_DIR:$LD_LIBRARY_PATH;g' /app/plex-htpc/Plex.sh"
+      ],
+      "post-install": [
+        "install -Dm644 tv.plex.PlexHTPC.desktop ${FLATPAK_DEST}/share/applications/tv.plex.PlexHTPC.desktop",
+        "install -Dm644 tv.plex.PlexHTPC.png ${FLATPAK_DEST}/share/icons/tv.plex.PlexHTPC.png",
+        "install -Dm644 tv.plex.PlexHTPC.appdata.xml ${FLATPAK_DEST}/share/metainfo/tv.plex.PlexHTPC.appdata.xml"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://downloads.plex.tv/htpc/1.17.0.3002-f753d4a0/linux/plex-htpc_1.17.0_amd64.snap",
+          "dest-filename": "plex-htpc.snap",
+          "sha256": "a08cc5b852a1be101212b6f3694449d70ba4c87bab934ac63c86e61c5f14307a"
+        },
+        {
+          "type": "file",
+          "path": "tv.plex.PlexHTPC.desktop"
+        },
+        {
+          "type": "file",
+          "path": "tv.plex.PlexHTPC.png"
+        },
+        {
+          "type": "file",
+          "path": "tv.plex.PlexHTPC.appdata.xml"
+        }
+      ]
+    }
+  ]
+}

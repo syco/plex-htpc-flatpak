@@ -5,7 +5,7 @@
   "sdk": "org.kde.Sdk",
   "base": "io.qt.qtwebengine.BaseApp",
   "base-version": "5.15-21.08",
-  "command": "/bin/bash",
+  "command": "/app/bin/start.sh",
   "finish-args": [
     "--socket=x11",
     "--socket=wayland",
@@ -124,13 +124,30 @@
       ]
     },
     {
+      "name": "apparmor",
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://gitlab.com/apparmor/apparmor.git",
+          "branch": "master"
+        }
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "cd libraries/libapparmor && sh autogen.sh",
+        "cd libraries/libapparmor && sh ./configure --prefix=/app",
+        "cd libraries/libapparmor && make",
+        "cd libraries/libapparmor && make install"
+      ]
+    },
+    {
       "name": "plex-htpc",
       "buildsystem": "simple",
       "build-commands": [
-        "unsquashfs -q -f -d /app/plex-htpc plex-htpc.snap",
-        "sed -i 's;LD_LIBRARY_PATH=$BASE_DIR/lib/:$BASE_DIR:$LD_LIBRARY_PATH;LD_LIBRARY_PATH=$BASE_DIR/usr/lib/x86_64-linux-gnu:$BASE_DIR/usr/lib/x86_64-linux-gnu/pulseaudio:$BASE_DIR/lib/:$BASE_DIR:$LD_LIBRARY_PATH;g' /app/plex-htpc/Plex.sh"
+        "unsquashfs -q -f -d /app/plex-htpc plex-htpc.snap"
       ],
       "post-install": [
+        "install -Dm755 start.sh /app/bin/start.sh",
         "install -Dm644 tv.plex.PlexHTPC.desktop ${FLATPAK_DEST}/share/applications/tv.plex.PlexHTPC.desktop",
         "install -Dm644 tv.plex.PlexHTPC.png ${FLATPAK_DEST}/share/icons/tv.plex.PlexHTPC.png",
         "install -Dm644 tv.plex.PlexHTPC.appdata.xml ${FLATPAK_DEST}/share/metainfo/tv.plex.PlexHTPC.appdata.xml"
@@ -141,6 +158,10 @@
           "url": "https://downloads.plex.tv/htpc/1.17.0.3002-f753d4a0/linux/plex-htpc_1.17.0_amd64.snap",
           "dest-filename": "plex-htpc.snap",
           "sha256": "a08cc5b852a1be101212b6f3694449d70ba4c87bab934ac63c86e61c5f14307a"
+        },
+        {
+          "type": "file",
+          "path": "start.sh"
         },
         {
           "type": "file",

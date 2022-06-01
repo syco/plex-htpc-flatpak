@@ -1,27 +1,9 @@
 [Desktop Entry]
-Version=1.0
+Type=Application
+Encoding=UTF-8
 Name=Plex HTPC
-Comment=The ultimate home theater experience
-Exec=plexmediaplayer
+Comment=
+Exec=/app/bin/start.sh
 Icon=tv.plex.PlexHTPC
 Terminal=false
-Type=Application
-Categories=AudioVideo;Video;Player;TV;
-
-Actions=TVF;TVW;DesktopF;DesktopW;
-
-[Desktop Action TVF]
-Name=TV [Fullscreen]
-Exec=plexmediaplayer --fullscreen --tv
-
-[Desktop Action TVW]
-Name=TV [Windowed]
-Exec=plexmediaplayer --windowed --tv
-
-[Desktop Action DesktopF]
-Name=Desktop [Fullscreen]
-Exec=plexmediaplayer --fullscreen --desktop
-
-[Desktop Action DesktopW]
-Name=Desktop [Windowed]
-Exec=plexmediaplayer --windowed --desktop
+Categories=Audio;Music;Video;Player;Media;

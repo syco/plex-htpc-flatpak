@@ -79,6 +79,51 @@
       "buildsystem": "autotools"
     },
     {
+      "name": "libtirpc",
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://archlinux.org/packages/core/x86_64/libtirpc/download",
+          "dest-filename": "xyz.tar.zst",
+          "sha256": "1182ef8c204658c4d97d431c9950da72bacd24f45ad0315131a1e48e8a09ea2a"
+        }
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "tar -xf xyz.tar.zst --strip-components=1 -C /app usr/include usr/lib"
+      ]
+    },
+    {
+      "name": "libnsl",
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://archlinux.org/packages/core/x86_64/libnsl/download",
+          "dest-filename": "xyz.tar.zst",
+          "sha256": "14984c1f7a8265266439e374956532b3727eead8118d48dd9c91d542642c67c8"
+        }
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "tar -xf xyz.tar.zst --strip-components=1 -C /app usr/include usr/lib"
+      ]
+    },
+    {
+      "name": "libwrap",
+      "sources": [
+        {
+          "type": "file",
+          "url": "https://archlinux.org/packages/community/x86_64/libwrap/download",
+          "dest-filename": "xyz.tar.zst",
+          "sha256": "4cbb83d8add5a3b1b02b24f69c8c618a34c37541d096be403ce8bc55c3f447bf"
+        }
+      ],
+      "buildsystem": "simple",
+      "build-commands": [
+        "tar -xf xyz.tar.zst --strip-components=1 -C /app usr/include usr/lib"
+      ]
+    },
+    {
       "name": "plex-htpc",
       "buildsystem": "simple",
       "build-commands": [
